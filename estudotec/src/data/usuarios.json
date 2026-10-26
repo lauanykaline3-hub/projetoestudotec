@@ -1,0 +1,32 @@
+{
+  "usuarios": [
+    {
+      "name": "Ana Clara",
+      "email": "ana.clara.demo2026@gmail.com",
+      "salt": "01b819287605c8bd72f337381552a7ec",
+      "passwordHash": "fd1afa43ee817f17568578eaacf71391fa0f0ee19a5a20378ba547c74d20340a",
+      "createdAt": "2026-10-26T00:00:00.000Z"
+    },
+    {
+      "name": "Bruno Miguel",
+      "email": "bruno.miguel.demo2026@gmail.com",
+      "salt": "5b5a53e4c939f936a95dfbdbbea9ba07",
+      "passwordHash": "078185319df629ecdc3f9f4060c4f12ad279213cd213c8815300c024c7bfea8b",
+      "createdAt": "2026-10-26T00:00:00.000Z"
+    },
+    {
+      "name": "Camila Souza",
+      "email": "camila.souza.demo2026@gmail.com",
+      "salt": "22d31821fdfd5112bae18d330a7e749a",
+      "passwordHash": "b6fcc819f7853dec36ce3417e5ccd0c504892530374de828546e54a1e7bdc6f5",
+      "createdAt": "2026-10-26T00:00:00.000Z"
+    },
+    {
+      "name": "Diego Santos",
+      "email": "diego.santos.demo2026@gmail.com",
+      "salt": "adeeb66328c3ac29a99ac91a84aa76be",
+      "passwordHash": "3d4891122466bfa71df6e528bfe27d6231630af9345ebccaeaae2745eb1a3594",
+      "createdAt": "2026-10-26T00:00:00.000Z"
+    }
+  ]
+}
