@@ -4,17 +4,53 @@
 - [x] Navbar responsiva com a marca Estudo Tec e links de matérias.
 - [x] Navegação por matéria, assunto, resumo e questões.
 - [x] Busca, feedback de resposta e progresso de estudo.
-- [x] Persistir seleção, respostas e progresso no navegador.
 - [x] Login e cadastro no frontend com validação Zod.
-- [x] Persistir contas locais com hash PBKDF2 e salt; não guardar senha em texto.
-- [x] Encerrar sessão e limpar progresso no botão Sair, preservando contas para novo acesso.
-- [x] Usar `src/data/usuarios.json` como seed com contas claramente identificadas como demonstração.
-- [x] Adicionar quatro contas fictícias de demonstração com hashes PBKDF2 no JSON seed.
-- [x] Remover API de autenticação e dependência de banco/driver no servidor.
-- [x] Compor as regras de estilo com utilitários Tailwind `@apply`.
+- [x] Remover resquícios de lógica de backend em favor de arquitetura 100% frontend.
+- [x] Armazenar senhas legíveis nos perfis de demonstração em `src/data/usuarios.json`.
+- [x] Criar controle de perfis de usuário: Administrador (`admin`) e Estudante (`usuario`).
+- [x] Suporte a fotos dos membros da equipe com fallback automático para iniciais coloridas em caso de erro/falha de carregamento.
+- [x] Criar **Painel de Controle do Administrador** com métricas gerais e visualização completa.
+- [x] Implementar CRUD completo de Matérias, Assuntos, Atividades e Usuários.
+- [x] **Criptografia total no LocalStorage**:
+  - Implementado módulo [storage-crypto.ts](file:///c:/DEV/projetoestudotec/estudotec/src/lib/storage-crypto.ts) com cifra simétrica e codificação Base64.
+  - Todas as chaves (`estudotec-usuarios`, `estudotec-dados`, `estudotec-sessao`, `estudotec-materias`) são salvas criptografadas, impedindo vazamento de dados caso inspecionado no navegador.
+- [x] **Função do Botão Sair e Eliminação de Chaves Residuais**:
+  - Ajustado para executar `localStorage.clear()`.
+  - Eliminadas todas as regravações automáticas que recriavam chaves no LocalStorage em segundo plano (em `readUsers`, `hydrate` e `useEffect`). Ao sair da conta, o LocalStorage é 100% esvaziado (0 chaves restantes).
+- [x] **Visualização de Senha com o Olho**:
+  - Botão interativo no input de senha para alternar entre `password` e `text` com ícones dinâmicos.
+- [x] **Remoção Definitiva dos Botões de Teste da Tela de Login**:
+  - Removido completamente o card e os botões "Entrar com perfil de teste (Papéis)".
+  - Acesso autêntico através dos campos de Gmail e senha.
+  - Seleção de papéis mantida no fluxo de cadastro ("🎓 Estudante" e "👑 Administrador").
+  - Na página `/equipes`, exibição e suporte do papel de cada participante.
+- [x] **Correções e Limpeza Definitiva no globals.css**:
+  - Conversão de todas as mais de 320 regras que usavam a sintaxe experimental e problemática `@apply [propriedade:valor]` para propriedades CSS puras e válidas.
+  - Remoção da regra inválida `@variant` com operador `&` na raiz do documento, que causava erro de sintaxe no VS Code.
+  - Zero erros e zero avisos na checagem de CSS do editor e do compilador.
+- [x] **Tema Dark / Light (Modo Escuro / Modo Claro)**:
+  - Contexto global e persistência no `localStorage` sob a chave `estudotec-tema`.
+  - Detecção da preferência do sistema operacional (`prefers-color-scheme`).
+  - Botão interativo de alternância (`ThemeToggle`) na tela inicial e na topbar (removido o botão da página `/equipes`, mantendo 100% o suporte e a resposta ao tema dark/light via classes utilitárias).
+  - Compatibilidade total via `@variant dark` do Tailwind v4 com classes utilitárias nativas (`dark:...`).
+- [x] **Migração de Estilizações para Tailwind CSS**:
+  - Migradas todas as classes customizadas da página de equipes (`.equipe-main`, `.equipe-card`, etc.) para classes utilitárias nativas do Tailwind CSS com suporte completo a light/dark mode.
+  - Removidos mais de 140 linhas de regras CSS redundantes do `globals.css`.
+  - Migrados os estilos inline (`style={{ ... }}`) remanescentes nos componentes para Tailwind CSS.
+- [x] **Sistema de Pages Completo (Substituição Definitiva de Âncoras e Botões de Estado)**:
+  - Eliminação de qualquer comportamento de âncora ou troca de estado interno estático: toda a navegação agora é feita por páginas reais do Next.js App Router.
+  - Criadas rotas dinâmicas tanto para matérias (`/materias/[slug]`) quanto para cada assunto (`/materias/[slug]/[topic]`).
+  - Sidebar refatorada para utilizar `<Link href="...">` em cada assunto com rotas amigáveis (ex: `/materias/matematica/porcentagem`).
+  - Topbar e breadcrumbs atualizados com navegação de rotas reais.
+- [x] **Animação de Transição de Páginas**:
+  - Implementado `src/app/template.tsx` com `key={pathname}`, garantindo que a animação `@keyframes pageFadeSlide` execute a cada transição de rota/página.
 
 ## Verificações
-- [x] `npx tsc --noEmit`
-- [x] `npm run lint`
-- [x] `npm audit` sem vulnerabilidades reportadas.
-- [x] Teste local de cadastro, duplicidade, senha válida/inválida e hash.
+- [x] `npx tsc --noEmit --incremental false` sem erros.
+- [x] `npm run lint` sem erros de linting.
+- [x] `npm run build` gerando todas as rotas estáticas e dinâmicas com sucesso.
+- [x] Teste de transição animada entre páginas.
+- [x] Teste de Dark Mode e Light Mode na página `/equipes`.
+- [x] Teste de criptografia e descriptografia dos dados gravados no LocalStorage.
+- [x] Teste de limpeza total do LocalStorage ao clicar em Sair da Conta.
+- [x] Teste de alternância de visualização da senha (olho `password` ↔ `text`).

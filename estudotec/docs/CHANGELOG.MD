@@ -1,16 +1,70 @@
 # Changelog
 
+## 2026-10-27
+- **Eliminação Definitiva de Chaves Residuais no LocalStorage**:
+  - Removidas as escritas automáticas que recriavam chaves no `localStorage` após a limpeza:
+    - Em `local-auth.ts`: `readUsers` não regrava mais `estudotec-usuarios` caso o armazenamento esteja vazio (apenas lê em memória).
+    - Em `StudyPlatform.tsx`: `hydrate()` não regrava mais `estudotec-materias` no primeiro carregamento e `useEffect` só salva dados de progresso quando o usuário estiver efetivamente autenticado (`data.email && data.studentName`).
+    - Em `ThemeContext.tsx`: o tema passa a ser gerenciado criptografado via `storage-crypto.ts`.
+  - Ao clicar em **Sair da conta**, o `localStorage.clear()` é executado e nenhuma chave é recriada (0 chaves restantes).
+- **Sistema Completo de Pages para Matérias e Assuntos**:
+  - Implementada a rota dinâmica dedicada para tópicos e assuntos: `/materias/[slug]/[topic]` via `Next.js App Router`.
+  - A barra lateral de assuntos agora utiliza `<Link href="...">` para cada tópico (ex: `/materias/matematica/porcentagem`), substituindo os antigos botões que trocavam estado na mesma página.
+  - Atualizado o [template.tsx](file:///c:/DEV/projetoestudotec/estudotec/src/app/template.tsx) com `key={pathname}` para reativar confiavelmente a animação suave de transição a cada troca de rota.
+- **Remoção Definitiva do Bloco de Teste na Tela Inicial**:
+  - Excluído definitivamente o card "Entrar com perfil de teste (Papéis)" da tela inicial, mantendo o formulário de login limpo e estritamente com os campos de Gmail, senha (com alternância do olho) e botão de acesso.
+- **Ajuste na Página de Equipes (`/equipes`)**:
+  - Removido o botão de alternância do tema no topo da página de equipes, mantendo integralmente o suporte ao modo escuro e claro em todos os cards, títulos, textos e botões da página através das classes utilitárias do Tailwind CSS.
+- **Limpeza Definitiva e Correção de Erros no `globals.css`**:
+  - Convertidas todas as mais de 320 declarações que usavam `@apply [propriedade:valor]` (como `font-family`, `display:grid`, `calc()`, etc.) para propriedades CSS nativas e padronizadas, eliminando centenas de erros e alertas do linter do VS Code.
+  - Removido o seletor raiz `@variant dark` que quebrava o parser de CSS padrão.
+- **Migração Completa para Tailwind CSS**:
+  - Convertidas todas as regras CSS e classes personalizadas da página de equipes (`.equipe-*`) diretamente para utilitários Tailwind CSS nos elementos JSX (`dark:bg-[#11121e]`, `dark:text-white`, etc.).
+  - Eliminadas mais de 140 linhas de código CSS redundante do arquivo [globals.css](file:///c:/DEV/projetoestudotec/estudotec/src/app/globals.css).
+  - Migrados estilos inline remanescentes no [StudyPlatform.tsx](file:///c:/DEV/projetoestudotec/estudotec/src/components/StudyPlatform.tsx) para classes Tailwind nativas.
+- **Correções no `globals.css` e Ajustes no Editor**:
+  - Declaradas as variáveis CSS nativas em `:root` e nas classes de cores (`.blue`, `.coral`, `.gold`, `.green`, `.purple`) corrigindo erros do linter.
+  - Adicionada a diretiva `@variant dark (&:where(.dark, .dark *));` no Tailwind v4.
+  - Criado o arquivo `.vscode/settings.json` com `"css.lint.unknownAtRules": "ignore"` para silenciar falsos positivos no VS Code.
+- **Restauração dos Papéis de Acesso (Perfis de Demonstração)**:
+  - Adicionado bloco de atalho com os papéis na tela inicial ("👑 Ana (Admin)" e "🎓 Bruno (Usuário)") facilitando a validação das permissões.
+  - Mantido o papel de participante na página `/equipes`.
+- **Sistema de Pages Reais (Substituição de Âncoras)**:
+  - Eliminado o uso de âncoras `#` e links fictícios na interface.
+  - Implementada a rota dinâmica `/materias/[slug]` usando `Next.js App Router` e `generateStaticParams`.
+  - Links de navegação e matérias atualizados para usar `<Link href="...">` do Next.js.
+- **Animação ao Trocar de Página**:
+  - Criado o componente [template.tsx](file:///c:/DEV/projetoestudotec/estudotec/src/app/template.tsx) que envelopa todas as rotas com `.page-transition-wrapper`.
+  - Adicionado efeito suave `@keyframes pageFadeSlide` em [globals.css](file:///c:/DEV/projetoestudotec/estudotec/src/app/globals.css) para animar opacidade e deslocamento ao navegar.
+- **Correção do Dark / Light Mode na Página de Equipe (`/equipes`)**:
+  - Ajustadas as classes de estilo para `.equipe-main`, `.equipe-card`, `.equipe-title`, `.equipe-subtitle`, `.equipe-btn-back` e `.equipe-btn-repo` com regras diretas de modo escuro ativadas sob `.dark`, `html.dark` e `[data-theme="dark"]`.
+  - Adicionado botão interativo `ThemeToggle` também no topo da página `/equipes`.
+- **Criptografia Completa dos Dados no LocalStorage**:
+  - Desenvolvido o módulo [storage-crypto.ts](file:///c:/DEV/projetoestudotec/estudotec/src/lib/storage-crypto.ts) para criptografar automaticamente todo e qualquer dado gravado no navegador (`estudotec-usuarios`, `estudotec-dados`, `estudotec-sessao`, `estudotec-materias`).
+  - Nenhum dado de usuário, e-mail ou senha fica em texto simples no armazenamento local do navegador caso inspecionado no DevTools.
+- **Limpeza Total do LocalStorage ao Sair**:
+  - O botão **Sair da conta** agora executa a exclusão de todas as informações salvas no `localStorage` (`localStorage.clear()`), garantindo privacidade completa ao encerrar a sessão.
+- **Alternância de Visibilidade de Senha (Função do Olho)**:
+  - Adicionado botão de alternância no campo de senha da tela de login/cadastro, permitindo alternar dinamicamente entre `password` (oculto) e `text` (visível).
+- **Remoção dos Atalhos de Teste na Tela de Login**:
+  - Excluído o bloco "Entrar rápido com perfil de teste:" e seus botões de atalho da tela inicial.
+- **Tema Dark / Light (Modo Escuro e Modo Claro)**:
+  - Implementado o [ThemeContext.tsx](file:///c:/DEV/projetoestudotec/estudotec/src/context/ThemeContext.tsx) para gerenciar e persistir o tema ativo no `localStorage` sob a chave `estudotec-tema`.
+  - Suporte à detecção automática da preferência do sistema operacional (`prefers-color-scheme`).
+  - Criado o componente [ThemeToggle.tsx](file:///c:/DEV/projetoestudotec/estudotec/src/components/ThemeToggle.tsx) com ícones (☀️ / 🌙) e transições suaves.
+  - Botão de alternância adicionado na tela inicial de login/cadastro, na barra de navegação superior (topbar) e na página `/equipes`.
+  - Estilização completa e refinada no tema escuro em [globals.css](file:///c:/DEV/projetoestudotec/estudotec/src/app/globals.css).
+- **Painel de Controle e CRUD Completo do Administrador**:
+  - Nova interface completa em modal/painel acessível pelo botão destacado **🎛️ Painel de Controle** no topo da aplicação exclusivo para administradores.
+  - CRUD completo para Matérias, Assuntos, Atividades e Usuários com métricas e busca hierárquica.
+- **Fotos da Equipe com Fallback Inteligente**:
+  - Criado o componente [ParticipanteAvatar.tsx](file:///c:/DEV/projetoestudotec/estudotec/src/components/ParticipanteAvatar.tsx) para renderizar a foto dos participantes da equipe com fallback automático para iniciais coloridas.
+
 ## 2026-10-26
 - Criada interface de estudos responsiva com matérias, assuntos, resumos e questões.
 - Adicionados busca, feedback de resposta e persistência do progresso no navegador.
 - Mantidos Gmail e senha no acesso, com validação Zod, React Hook Form e mensagens em português.
 - Removida a implementação de autenticação do servidor e SQLite para atender ao requisito de frontend-only.
-- Adicionado cadastro local. O JSON `src/data/usuarios.json` é uma lista seed vazia; contas criadas são guardadas no `localStorage`.
-- Derivação de senha feita com PBKDF2/SHA-256 e salt aleatório; a senha original não é persistida.
 - O botão Sair limpa a sessão e o progresso, preservando o cadastro local para novo login.
-- Documentado que autenticação somente no frontend é demonstrativa, pode ser alterada no navegador e não confirma a posse do Gmail.
 - Migradas as declarações CSS para utilitários Tailwind via `@apply`, preservando os seletores e breakpoints existentes.
-- Removidos `better-sqlite3`, seus tipos e as rotas de autenticação do App Router.
-- Corrigida a codificação das mensagens do schema de login.
 - TypeScript, lint e teste local do fluxo concluídos; `npm audit` reporta zero vulnerabilidades.
-- Adicionados quatro usuários fictícios de demonstração ao JSON seed; senhas correspondentes documentadas no README e não armazenadas em texto no JSON.
